@@ -1,5 +1,5 @@
 
-BioNLI: A Semantic Natural Language Interface for Bioinformatics Databases
+<font size=12px> BioNLI: A Semantic Natural Language Interface for Bioinformatics Databases</font>
 
 <font colore=blue><b>Project Overview</font></b>
 
