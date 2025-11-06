@@ -57,9 +57,10 @@ Follow these instructions to get a copy of the project up and running on your lo
 You need Docker and Docker Compose installed on your system.
 
 <b>1. Clone the Repository</b>
-
+<pre>
 git clone [https://github.com/YourGitHubOrg/bio_nli.git](https://github.com/YourGitHubOrg/bionli.git)
 cd bionli
+</pre>
 
 
 <b>2. Configure Environment</b>
