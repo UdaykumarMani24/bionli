@@ -58,8 +58,8 @@ You need Docker and Docker Compose installed on your system.
 
 1. Clone the Repository
 
-git clone [https://github.com/YourGitHubOrg/bio_nli.git](https://github.com/YourGitHubOrg/bio_nli.git)
-cd bio_nli
+git clone [https://github.com/YourGitHubOrg/bio_nli.git](https://github.com/YourGitHubOrg/bionli.git)
+cd bionli
 
 
 2. Configure Environment
