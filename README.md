@@ -1,7 +1,7 @@
 
 BioNLI: A Semantic Natural Language Interface for Bioinformatics Databases
 
-Project Overview
+<font colore=blue><b>Project Overview</font></b>
 
 BioNLI (Bio-Natural Language Interface) is a robust, deterministic, and highly accurate semantic framework designed to bridge the gap between natural language queries and complex bioinformatics databases and APIs (such as NCBI Entrez and Ensembl REST).
 
