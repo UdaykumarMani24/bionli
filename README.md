@@ -9,7 +9,7 @@ In the life sciences, data retrieval is often constrained by complex database sc
 
 This repository contains the full source code, deployment files, and necessary test data for the BioNLI system.
 
- Key Features
+<b> Key Features</b>
 
 Semantic Query Resolution: Translates complex queries like "find mouse homologs of TP53" or "show immune genes that interact with viruses" into structured database API calls.
 
@@ -21,7 +21,7 @@ Deterministic and Traceable: Unlike general Large Language Models (LLMs), BioNLI
 
 
 
-Architecture and Structure
+<b>Architecture and Structure</b>
 
 The BioNLI system is built on a modular Python architecture designed for maintainability and scalability.
 <pre>
@@ -48,25 +48,25 @@ bio_nli/
 └── README.md                   # This file
 </pre>
 
- Getting Started
+<b> Getting Started</b>
 
 Follow these instructions to get a copy of the project up and running on your local machine.
 
-Prerequisites
+<b>Prerequisites</b>
 
 You need Docker and Docker Compose installed on your system.
 
-1. Clone the Repository
+<b>1. Clone the Repository</b>
 
 git clone [https://github.com/YourGitHubOrg/bio_nli.git](https://github.com/YourGitHubOrg/bionli.git)
 cd bionli
 
 
-2. Configure Environment
+<b>2. Configure Environment</b>
 
 Review and update the settings in config/settings.py and config/databases.yaml as needed, particularly for any private database connections or API keys (though the system primarily relies on public APIs).
 
-3. Build and Run with Docker
+<b>3. Build and Run with Docker</b>
 
 The easiest way to run BioNLI is using the provided Dockerfile.
 
@@ -77,18 +77,18 @@ docker build -t bionli-app .
 docker run -d -p 8000:5000 --name bionli-instance bionli-app
 
 
-4. Access the Application
+<b>4. Access the Application</b>
 
 Once the container is running, the BioNLI web interface will be available at:
 
 http://localhost:8000
 
- Contributing
+<b> Contributing</b>
 
 Contributions are welcome! If you have suggestions for improvements, new ontology integrations, or bug fixes, please open an issue or submit a pull request.
 
 
- Contact
+<b> Contact</b>
 
 For support or collaboration, please contact:
 
