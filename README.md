@@ -24,7 +24,7 @@ Deterministic and Traceable: Unlike general Large Language Models (LLMs), BioNLI
 Architecture and Structure
 
 The BioNLI system is built on a modular Python architecture designed for maintainability and scalability.
-
+<pre>
 bio_nli/
 ├── app.py                      # Main entry point for the Flask web application
 ├── core/                       # Core NLP, query logic, and service connectors
@@ -46,7 +46,7 @@ bio_nli/
 ├── requirements.txt            # Python dependencies
 ├── Dockerfile                  # Instructions for building the Docker image
 └── README.md                   # This file
-
+</pre>
 
  Getting Started
 
