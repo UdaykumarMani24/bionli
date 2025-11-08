@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioNLI - Natural Language Interface for Bioinformatics</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .query-box { width: 100%; height: 80px; margin: 20px 0; padding: 15px; border: 2px solid #ddd; border-radius: 5px; font-size: 16px; resize: vertical; }
+        .btn { background: #007cba; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-right: 10px; }
+        .btn:hover { background: #005a87; }
+        .results { margin-top: 20px; padding: 25px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa; }
+        .section { margin: 15px 0; padding: 15px; background: white; border-radius: 5px; border-left: 4px solid #007cba; }
+        .entity-badge { display: inline-block; background: #e3f2fd; color: #1976d2; padding: 2px 8px; margin: 2px; border-radius: 3px; font-size: 12px; }
+        .confidence-high { color: #2e7d32; font-weight: bold; }
+        .example-query { color: #007cba; cursor: pointer; text-decoration: underline; margin: 5px 0; }
+        .example-query:hover { color: #005a87; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 BioNLI - Bioinformatics Natural Language Interface</h1>
+        <p>Ask questions about genes, proteins, sequences, and biological data in plain English.</p>
+        
+        <div>
+            <textarea id="queryInput" class="query-box" placeholder="e.g., What is the function of TP53 gene?"></textarea>
+            <div>
+                <button onclick="processQuery()" class="btn">Ask BioNLI</button>
+                <button onclick="clearQuery()" class="btn" style="background: #6c757d;">Clear</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results" style="display: none;">
+            <h3>Results:</h3>
+            <div id="resultContent"></div>
+        </div>
+        
+        <div class="section">
+            <h3>Example Queries:</h3>
+            <div class="example-query" onclick="setExample('What is the function of TP53 gene?')">What is the function of TP53 gene?</div>
+            <div class="example-query" onclick="setExample('Show me interactions of EGFR protein')">Show me interactions of EGFR protein</div>
+            <div class="example-query" onclick="setExample('Where is BRCA1 expressed?')">Where is BRCA1 expressed?</div>
+       
+            <div class="example-query" onclick="setExample('Find homologs of TP53 in mice')">Find homologs of TP53 in mice</div>
+        </div>
+    </div>
+
+    <script>
+        function setExample(query) {
+            document.getElementById('queryInput').value = query;
+        }
+        
+        function clearQuery() {
+            document.getElementById('queryInput').value = '';
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        async function processQuery() {
+            const query = document.getElementById('queryInput').value;
+            const resultsDiv = document.getElementById('results');
+            const contentDiv = document.getElementById('resultContent');
+            
+            if (!query) {
+                alert('Please enter a query');
+                return;
+            }
+            
+            contentDiv.innerHTML = '<div style="text-align: center; padding: 20px;"><em>Processing your query...</em></div>';
+            resultsDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+                
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                contentDiv.innerHTML = '<div class="section" style="border-left-color: #d32f2f; background: #ffebee;">Error: ' + error.message + '</div>';
+            }
+        }
+        
+        function displayResults(data) {
+            const contentDiv = document.getElementById('resultContent');
+            let html = '';
+            
+            // Display query analysis
+            html += `<div class="section">
+                <h4>🔍 Query Analysis</h4>
+                <p><strong>Type:</strong> ${data.query_analysis.query_type}</p>
+                <p><strong>Confidence:</strong> <span class="confidence-high">${(data.query_analysis.confidence_score * 100).toFixed(1)}%</span></p>
+                <p><strong>Entities:</strong>`;
+            
+            // Improved entities display
+            Object.entries(data.query_analysis.entities).forEach(([type, entities]) => {
+                html += `<br><strong>${type}:</strong> `;
+                entities.forEach(entity => {
+                    html += `<span class="entity-badge">${entity.text}</span> `;
+                });
+            });
+            html += `</p></div>`;
+            
+            // Display database results
+            if (data.database_results && data.database_results.length > 0) {
+                html += `<div class="section">
+                    <h4>📊 Database Results</h4>`;
+                data.database_results.forEach((result, index) => {
+                    html += `<div style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 5px; border-left: 3px solid #28a745;">
+                        <h5>Result ${index + 1}</h5>`;
+                    for (const [key, value] of Object.entries(result)) {
+                        html += `<p><strong>${key}:</strong> ${value}</p>`;
+                    }
+                    html += `</div>`;
+                });
+                html += `</div>`;
+            }
+            
+            // Display service recommendations with improved pathways
+            if (data.service_recommendations && data.service_recommendations.length > 0) {
+                html += `<div class="section">
+                    <h4>🔬 Service Recommendations</h4>`;
+                data.service_recommendations.forEach(service => {
+                    html += `<div style="margin: 10px 0; padding: 10px; background: #e8f4fd;">`;
+                    for (const [key, value] of Object.entries(service)) {
+                        if (key === 'pathways' && Array.isArray(value)) {
+                            html += `<p><strong>Pathways:</strong>`;
+                            value.forEach(pathway => {
+                                html += `<div style="margin: 5px 0; padding: 5px; background: #ffffff; border-radius: 3px;">
+                                    ${pathway.name} (${pathway.source})
+                                </div>`;
+                            });
+                            html += `</p>`;
+                        } else if (key !== 'pathways') {
+                            html += `<p><strong>${key}:</strong> ${value}</p>`;
+                        }
+                    }
+                    html += `</div>`;
+                });
+                html += `</div>`;
+            }
+            
+            // Display suggested queries
+            if (data.suggested_queries && data.suggested_queries.length > 0) {
+                html += `<div class="section">
+                    <h4>💡 Suggested Follow-up Queries</h4>`;
+                data.suggested_queries.forEach(query => {
+                    html += `<div class="example-query" onclick="setExample('${query}')">${query}</div>`;
+                });
+                html += `</div>`;
+            }
+            
+            contentDiv.innerHTML = html;
+        }
+        
+        // Allow pressing Enter to submit (while allowing Shift+Enter for new lines)
+        document.getElementById('queryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                processQuery();
+            }
+        });
+    </script>
+</body>
+</html>
