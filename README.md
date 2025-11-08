@@ -26,26 +26,28 @@ Deterministic and Traceable: Unlike general Large Language Models (LLMs), BioNLI
 The BioNLI system is built on a modular Python architecture designed for maintainability and scalability.
 <pre>
 bio_nli/
-├── app.py                      # Main entry point for the Flask web application
-├── core/                       # Core NLP, query logic, and service connectors
-│   ├── nlp_processor.py        # Handles spaCy models, entity recognition, and semantic parsing
-│   ├── query_builder.py        # Constructs API payloads and database queries (e.g., Entrez, Ensembl)
-│   ├── database_connector.py   # Interfaces with internal configuration (databases.yaml)
-│   ├── bio_services.py         # Abstracts API calls to external services (NCBI, Ensembl)
-│   └── ontology_manager.py     # Manages ontology loading and inference logic (GO, PRO, ChEBI, etc.)
-├── config/                     # Configuration files and settings
-│   ├── settings.py             # General application environment settings
-│   └── databases.yaml          # Database connection strings and schemas
-├── models/                     # Custom machine learning models and data
-│   ├── entity_detector.py      # Custom models for biological entity detection
-│   └── query_classifier.py     # Classification logic for query types (e.g., homology, interaction)
-├── api/                        # REST API endpoint definitions
-│   └── routes.py               # Defines all /api/ endpoints for the application
-├── static/                     # Web assets (CSS/JS)
-├── templates/                  # Jinja2 HTML templates for the web interface
-├── requirements.txt            # Python dependencies
-├── Dockerfile                  # Instructions for building the Docker image
-└── README.md                   # This file
+├── app.py                          # Main Flask application with routes
+├── core/                           # Core business logic
+│   ├── __init__.py                 # Package initialization
+│   ├── nlp_processor.py            # NLP processing & entity recognition
+│   ├── query_builder.py            # Query construction & payload building
+│   ├── database_connector.py       # Database & API connections
+│   ├── bio_services.py             # Biological service integrations
+│   └── ontology_manager.py         # Ontology management & reasoning
+├── config/                         # Configuration management
+│   ├── __init__.py
+│   ├── settings.py                 # App settings & environment config
+├── evaluation/                     # Evaluation suite
+│   ├── __init__.py
+│   ├── benchmark_questions.py      # Benchmark question sets & performance testing
+│   └── evaluate_system.py          # Overall system evaluation & metrics
+├── templates/                      # Jinja2 HTML templates
+│   ├── base.html                   # Base template
+│   ├── index.html                  # Home page
+│   ├── results.html                # Query results page
+│   └── error.html                  # Error page
+├── requirements.txt                # Python dependencies
+└── README.md                       # Project documentation
 </pre>
 
 # <b> Getting Started</b>
