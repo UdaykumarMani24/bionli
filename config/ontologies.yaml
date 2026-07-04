@@ -1,0 +1,21 @@
+# Ontology Configuration
+ontologies:
+  - name: go
+    url: http://purl.obolibrary.org/obo/go.owl
+    local_path: data/ontologies/go.owl
+    enabled: true
+    
+  - name: ncbitaxon
+    url: http://purl.obolibrary.org/obo/ncbitaxon.owl
+    local_path: data/ontologies/ncbitaxon.owl
+    enabled: true
+    
+  - name: doid
+    url: http://purl.obolibrary.org/obo/doid.owl
+    local_path: data/ontologies/doid.owl
+    enabled: true
+
+reasoning:
+  expand_entities: true
+  infer_relations: true
+  max_depth: 3
