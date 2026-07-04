@@ -1,0 +1,156 @@
+# Basic sequence creation
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
+# Simple sequence
+dna_seq = Seq("ATGCGTACGTAGCTAGC")
+protein_seq = Seq("MVLSPADKTNVKAAW")
+
+
+
+print(f"Sequence: {dna_seq}")
+print(f"Length: {len(dna_seq)}")
+
+
+# TEACH THESE 10 CORE FUNCTIONS
+from Bio.Seq import Seq
+
+seq = Seq("ATGCGTACGTAG")
+
+# 1. Complement
+print(f"Complement: {seq.complement()}")  # TACGCATGCATC
+
+# 2. Reverse complement
+print(f"Reverse complement: {seq.reverse_complement()}")  # CTACGTACGCAT
+
+# 3. Transcription (DNA -> RNA)
+print(f"RNA: {seq.transcribe()}")  # AUGCGUACGUAG
+
+# 4. Back transcription (RNA -> DNA)
+rna = Seq("AUGCAU")
+print(f"Back to DNA: {rna.back_transcribe()}")  # ATGCAT
+
+# 5. Translation (DNA/RNA -> Protein)
+print(f"Protein: {seq.translate()}")  # MRT*
+
+# 6. Translation with table (mitochondrial)
+print(f"Mitochondrial: {seq.translate(table=2)}")
+
+# 7. Count nucleotides
+print(f"G count: {seq.count('G')}")  # 3
+print(f"GC content: {(seq.count('G') + seq.count('C'))/len(seq)*100}%")
+
+# 8. Find substrings
+print(f"Find 'GTA': {seq.find('GTA')}")  # Index position
+)}")
+
+
+
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
+
+# Create a sequence with metadata
+seq = Seq("ATGCGTACGTAG")
+record = SeqRecord(
+    seq,
+    id="seq_001",
+    name="example_gene",
+    description="A sample gene sequence",
+    annotations={"organism": "E. coli", "gene": "lacZ"}
+)
+
+# Access attributes
+print(f"ID: {record.id}")
+print(f"Name: {record.name}")
+print(f"Description: {record.description}")
+print(f"Annotations: {record.annotations}")
+print(f"Sequence: {record.seq}")
+
+
+from Bio import SeqIO
+
+# Method 1: Read one record
+record = SeqIO.read("example.fasta", "fasta")
+print(f"ID: {record.id}")
+print(f"Sequence: {record.seq[:50]}...")
+
+# Method 2: Read multiple records (recommended)
+for record in SeqIO.parse("multifasta.fasta", "fasta"):
+    print(f">{record.id}")
+    print(f"Length: {len(record.seq)}")
+    print(f"First 100 bases: {record.seq[:100]}")
+
+# Method 3: Store in list (small files only)
+records = list(SeqIO.parse("small.fasta", "fasta"))
+print(f"Found {len(records)} sequences")
+
+# Method 4: Dictionary for quick access
+record_dict = SeqIO.to_dict(SeqIO.parse("sequences.fasta", "fasta"))
+print(record_dict.keys())
+specific_seq = record_dict["gene_001"]
+
+
+from Bio import SeqIO
+
+# GenBank files have rich annotations
+for record in SeqIO.parse("sequence.gb", "genbank"):
+    print(f"ID: {record.id}")
+    print(f"Name: {record.name}")
+    print(f"Description: {record.description}")
+    print(f"Length: {len(record.seq)}")
+    
+    # Access features
+    for feature in record.features:
+        print(f"Feature type: {feature.type}")
+        print(f"Location: {feature.location}")
+        print(f"Qualifiers: {feature.qualifiers}")
+        if feature.type == "CDS":
+            print(f"Protein translation: {feature.qualifiers.get('translation', ['N/A'])[0][:50]}")
+
+# Extract specific features
+cds_features = [f for f in record.features if f.type == "CDS"]
+print(f"Number of CDS features: {len(cds_features)}")
+
+
+from Bio.PDB import PDBParser
+
+# Create parser
+parser = PDBParser(QUIET=True)  # QUIET suppresses warnings
+
+# Parse structure
+structure = parser.get_structure('protein', 'pdb_files/1XYZ.pdb')
+
+# Basic structure hierarchy
+print(f"Structure: {structure}")
+print(f"Number of models: {len(structure)}")
+
+# Navigate hierarchy: Structure -> Model -> Chain -> Residue -> Atom
+for model in structure:
+    print(f"Model: {model.id}")
+    for chain in model:
+        print(f"  Chain: {chain.id}")
+        print(f"  Number of residues: {len(chain)}")
+        for residue in chain:
+            print(f"    Residue: {residue.resname} {residue.id[1]}")
+            for atom in residue:
+                print(f"      Atom: {atom.name} at {atom.coord}")
+
+# Practical: Count everything
+def count_structure_elements(structure):
+    stats = {
+        'models': 0,
+        'chains': 0,
+        'residues': 0,
+        'atoms': 0
+    }
+    for model in structure:
+        stats['models'] += 1
+        for chain in model:
+            stats['chains'] += 1
+            for residue in chain:
+                stats['residues'] += 1
+                stats['atoms'] += len(residue)
+    return stats
+
+stats = count_structure_elements(structure)
+print(stats)
